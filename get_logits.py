@@ -10,6 +10,7 @@ from names import get_names
 
 
 DEVICE = 'cpu'
+BATCH_SIZE = 32
 
 # load tokenizer, model, data
 model = HookedTransformer.from_pretrained("gpt2-small").to(DEVICE)
@@ -24,9 +25,10 @@ my_ds = IOIFullDataset(
   max_gen_len=1000,
   prepend_bos=True,
 )
+print('Total dataset size:', len(my_ds))
 
 # run forward passes
-res = ioi_eval_sliced(model, dataset=my_ds, batch_size=32)
+res = ioi_eval_sliced(model, dataset=my_ds, batch_size=BATCH_SIZE)
 
 bad_res = []
 for tmp in res:
