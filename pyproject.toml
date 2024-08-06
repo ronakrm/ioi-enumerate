@@ -13,6 +13,7 @@ tqdm = "^4.66.5"
 spacy = "^3.7.5"
 torch = "^2.4.0"
 eindex-callum = "^0.1.2"
+pandas = "^2.2.2"
 
 
 [build-system]

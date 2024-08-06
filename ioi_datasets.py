@@ -2,6 +2,8 @@ import random
 from typing import Dict, List, Optional
 from transformer_lens.utils import test_prompt
 
+import pandas as pd
+
 from eindex import eindex
 import einops
 import torch
@@ -26,6 +28,7 @@ class IOIFullDataset(Dataset):
         seed: int = 42,
     ):
         random.seed(seed)
+
         self.seed = seed
         self.tokenizer = tokenizer
         self.prepend_bos = prepend_bos
@@ -39,6 +42,7 @@ class IOIFullDataset(Dataset):
         total_samples = min(max_gen_len, full_size)
         pbar = tqdm(total = total_samples)
 
+        self.samples = []
         for template in templates:
             # hard coded for now for 2 noun types
             for place in nouns[list(nouns.keys())[0]]:
@@ -96,7 +100,7 @@ class IOIFullDataset(Dataset):
 
 @torch.inference_mode()
 def ioi_eval_sliced(
-    model, dataset, batch_size=8, tokenizer=None, symmetric=False, device='cpu'
+    model, dataset, res_file, batch_size=8, tokenizer=None, symmetric=False, device='cpu'
 ):
     """
     Copy of existing ioi_eval but with the ability to return all logit differences
@@ -134,6 +138,9 @@ def ioi_eval_sliced(
             res_dict = batch["extras"][i]
             res_dict["logit_diff"] = logit_diffs[i].item()
             res_list.append(res_dict)
+
+            indiv_df = pd.DataFrame(res_list)
+            indiv_df.to_csv(res_file, index=False)
 
     return res_list
 

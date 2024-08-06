@@ -3,7 +3,7 @@ from transformer_lens import HookedTransformer
 from eindex import eindex
 from tqdm import tqdm
 
-from ioi_datasets import IOIDataset, IOIFullDataset, ioi_eval_sliced
+from ioi_datasets import IOIFullDataset, ioi_eval_sliced
 from ioi_constants import BABA_TEMPLATES, NOUNS_DICT
 
 from names import get_names
@@ -11,6 +11,7 @@ from names import get_names
 
 DEVICE = 'cpu'
 BATCH_SIZE = 32
+RES_FILE = "ioi_logit_dump.csv"
 
 # load tokenizer, model, data
 model = HookedTransformer.from_pretrained("gpt2-small").to(DEVICE)
@@ -28,7 +29,7 @@ my_ds = IOIFullDataset(
 print('Total dataset size:', len(my_ds))
 
 # run forward passes
-res = ioi_eval_sliced(model, dataset=my_ds, batch_size=BATCH_SIZE)
+res = ioi_eval_sliced(model, dataset=my_ds, res_file=RES_FILE, batch_size=BATCH_SIZE)
 
 bad_res = []
 for tmp in res:
