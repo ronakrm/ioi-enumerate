@@ -6,12 +6,12 @@ authors = ["Ronak Mehta <ronakrm@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 transformers = "^4.44.0"
 transformer-lens = "^2.3.0"
 tqdm = "^4.66.5"
 spacy = "^3.7.5"
-torch = "^2.4.0"
+torch = "^2.3.0"
 eindex-callum = "^0.1.2"
 pandas = "^2.2.2"
 
