@@ -1,13 +1,8 @@
 import random
 from typing import Dict, List, Optional
-from transformer_lens.utils import test_prompt
-
-import pandas as pd
 
 from eindex import eindex
-import einops
 import torch
-from datasets import load_dataset
 from tqdm import tqdm
 from torch.utils.data import DataLoader, Dataset
 
@@ -61,6 +56,9 @@ class IOIFullDataset(Dataset):
                             }
 
                             built_sample = self.get_sample(meta_dict)
+                            if len(built_sample['prompt_toks']) != 16:
+                                continue
+
                             self.samples.append(built_sample)
                             pbar.update(1)
 
@@ -72,7 +70,8 @@ class IOIFullDataset(Dataset):
 
     def __getitem__(self, idx):
         sample = self.samples[idx]
-        prompt = self.tokenizer.encode(sample["text"])
+        # prompt = self.tokenizer.encode(sample["text"])
+        prompt = sample['prompt_toks']
         if self.prepend_bos:
             prompt = [self.tokenizer.bos_token_id] + prompt
 
@@ -95,6 +94,8 @@ class IOIFullDataset(Dataset):
         sample = sample.replace("[B]", meta_dict["S"])
         sample_dict["text"] = sample
 
+        print(sample_dict['text'])
+        sample_dict['prompt_toks'] = self.tokenizer.encode(sample_dict["text"])
         return sample_dict
 
 
@@ -130,17 +131,14 @@ def ioi_eval_sliced(
         prompt = batch["prompt"].to(device)
         
         io, s = torch.stack(batch["IO"]), torch.stack(batch["S"])
-        batch_logits = model(prompt, return_type="logits")[:, -1, :].detach().cpu()
+        batch_logits = model(prompt, return_type="logits")[:, -1, :]
         logit_diffs = eindex(batch_logits, io, 'b [b]') \
                      - eindex(batch_logits, s, 'b [b]')
 
         for i in range(len(batch['prompt'])):
             res_dict = batch["extras"][i]
-            res_dict["logit_diff"] = logit_diffs[i].item()
+            res_dict["logit_diff"] = logit_diffs[i].detach().cpu().item()
             res_list.append(res_dict)
-
-            indiv_df = pd.DataFrame(res_list)
-            indiv_df.to_csv(res_file, index=False)
 
     return res_list
 
