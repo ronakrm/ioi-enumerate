@@ -56,8 +56,6 @@ class IOIFullDataset(Dataset):
                             }
 
                             built_sample = self.get_sample(meta_dict)
-                            if len(built_sample['prompt_toks']) != 16:
-                                continue
 
                             self.samples.append(built_sample)
                             pbar.update(1)
@@ -94,7 +92,6 @@ class IOIFullDataset(Dataset):
         sample = sample.replace("[B]", meta_dict["S"])
         sample_dict["text"] = sample
 
-        print(sample_dict['text'])
         sample_dict['prompt_toks'] = self.tokenizer.encode(sample_dict["text"])
         return sample_dict
 
@@ -112,8 +109,8 @@ def ioi_eval_sliced(
 
     def collate(samples):
         prompts = [sample["prompt"] for sample in samples]
-        # padded_prompts = torch.nn.utils.rnn.pad_sequence(prompts, batch_first=True)
-        padded_prompts = torch.stack(prompts)
+        padded_prompts = torch.nn.utils.rnn.pad_sequence(prompts, batch_first=True)
+        # padded_prompts = torch.stack(prompts)
         return {
             "prompt": padded_prompts,
             "IO": [sample["IO"][0] for sample in samples],
@@ -129,9 +126,10 @@ def ioi_eval_sliced(
     res_list = []
     for batch in tqdm(data_loader):
         prompt = batch["prompt"].to(device)
+        end_inds = torch.tensor(batch["prompt_length"]) - 1
         
         io, s = torch.stack(batch["IO"]), torch.stack(batch["S"])
-        batch_logits = model(prompt, return_type="logits")[:, -1, :]
+        batch_logits = model(prompt, return_type="logits")[torch.arange(len(prompt)), end_inds, :]
         logit_diffs = eindex(batch_logits, io, 'b [b]') \
                      - eindex(batch_logits, s, 'b [b]')
 
