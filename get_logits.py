@@ -13,12 +13,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--device', default='cpu', type=str)
 parser.add_argument('--batch_size', default=32, type=int)
 parser.add_argument('--res_file', default='tmp.csv', type=str)
-parser.add_argument('--model', default='gpt2-small', type=str)
+parser.add_argument('--model_name', default='gpt2-small', type=str)
 parser.add_argument('--max_num_samples', default=1000, type=int)
 args = parser.parse_args()
 
 # load tokenizer, model, data
-model = HookedTransformer.from_pretrained("gpt2-small").to(args.device)
+model = HookedTransformer.from_pretrained(model_name).to(args.device)
 tokenizer = model.tokenizer
 names = get_names('original_ioi')
 
