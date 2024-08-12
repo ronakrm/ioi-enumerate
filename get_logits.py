@@ -18,7 +18,7 @@ parser.add_argument('--max_num_samples', default=1000, type=int)
 args = parser.parse_args()
 
 # load tokenizer, model, data
-model = HookedTransformer.from_pretrained(model_name).to(args.device)
+model = HookedTransformer.from_pretrained(args.model_name).to(args.device)
 tokenizer = model.tokenizer
 names = get_names('original_ioi')
 
