@@ -96,7 +96,7 @@ def plot_hists(
 
     sns.histplot(
         group_2,
-        color=myPurple,
+        color=myBlue,
         bins=100,
         alpha=0.8,
         ax=ax,
@@ -104,28 +104,29 @@ def plot_hists(
 
     sns.histplot(
         group_1,
-        color=myBlue,
+        color=myPurple,
         bins=100,
         alpha=0.8,
         ax=ax,
     )
 
-    plt.legend([f'{label_prefix}{val}', f'{label_prefix}not {val}'], loc='upper right')
+    plt.legend([f'{label_prefix}not {val}', f'{label_prefix} {val}'], loc='upper right')
 
     plt.savefig(outname, bbox_inches='tight', pad_inches=0.0)
 
 
 if __name__ == '__main__':
 
-    print('Loading data...')
-    df = pd.read_csv('results/small_logits.csv')
     # Small
     # # examples with logit diff < 0:	 125583 out of 9313920
     # % examples with logit diff < 0:	 1.348%
     # S: Lisa, then IO: Alicia
+
+    print('Loading data...')
+    df = pd.read_csv('results/small_logits.csv')
     
-    print('Plotting...')
-    plot_full_hist(df, n=100000, plot_label="GPT-2 Small Full BABA IOI Logit Diffs", outname='figs/small_full.png')
+    # print('Plotting...')
+    # plot_full_hist(df, n=100000, plot_label="GPT-2 Small Full BABA IOI Logit Diffs", outname='figs/small_full.png')
     
     print('Plotting...')
     plot_hists(df, 'S', 'Lisa', plot_col='logit_diff', label_prefix="", outname='figs/small_s.png')
