@@ -56,10 +56,13 @@ def plot_full_hist(
     ax.set_xlabel("Logit Difference Between S and IO")
     ax.set_xlim([-2.5,12.5])
 
+
     if n == 0:
         plt.legend([f"{plot_label}"], loc='upper right')
     else:
         plt.legend([f"{plot_label} (n={n})"], loc='upper right')
+
+    plt.axvline(x=0, color='black', linestyle='--', linewidth=2, label=None)
 
     plt.savefig(outname, bbox_inches='tight', pad_inches=0.0)
 
@@ -124,6 +127,8 @@ def plot_hists(
 
     plt.legend([f'{label_prefix}not {val}', f'{label_prefix}{val}'], loc='upper right')
 
+    plt.axvline(x=0, color='black', linestyle='--', linewidth=2, label=None)
+
     plt.savefig(outname, bbox_inches='tight', pad_inches=0.0)
 
 
@@ -136,13 +141,13 @@ if __name__ == '__main__':
 
     # print('Loading data...')
     # df = pd.read_csv('results/small_logits.csv')
-    
+    # 
     # print('Plotting...')
     # plot_full_hist(df, plot_label="GPT-2 Small Full BABA IOI Logit Diffs", outname='figs/small_full.png')
-    
+    # 
     # print('Plotting...')
     # plot_hists(df, 'S', 'Lisa', plot_col='logit_diff', label_prefix="", outname='figs/small_s.png')
-    
+    # 
     # print('Plotting...')
     # s_df = df[df['S'] == 'Lisa']
     # plot_hists(s_df, 'IO', 'Katie', plot_col='logit_diff', label_prefix="S: Lisa, IO: ", outname='figs/small_s_io.png')
