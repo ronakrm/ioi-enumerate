@@ -125,8 +125,8 @@ if __name__ == '__main__':
     print('Loading data...')
     df = pd.read_csv('results/small_logits.csv')
     
-    # print('Plotting...')
-    # plot_full_hist(df, n=100000, plot_label="GPT-2 Small Full BABA IOI Logit Diffs", outname='figs/small_full.png')
+    print('Plotting...')
+    plot_full_hist(df, n=100000, plot_label="GPT-2 Small Full BABA IOI Logit Diffs", outname='figs/small_full.png')
     
     print('Plotting...')
     plot_hists(df, 'S', 'Lisa', plot_col='logit_diff', label_prefix="", outname='figs/small_s.png')
