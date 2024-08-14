@@ -15,9 +15,12 @@ def plot_full_hist(
     plot_col: str = 'logit_diff',
     plot_label="",
     outname="figs/test.png",
-    n=10000,
+    n=0,
 ):
-    sampled_df = mydf[plot_col].sample(n=n, random_state=0)
+    if n == 0:
+        sampled_df = mydf[plot_col]
+    else:
+        sampled_df = mydf[plot_col].sample(n=n, random_state=0)
 
     # Setup
     fig = plt.figure(figsize=(9,3), dpi=300, frameon=False)
@@ -50,7 +53,13 @@ def plot_full_hist(
         ax=ax,
     )
 
-    plt.legend([f"{plot_label} (n={n})"], loc='upper right')
+    ax.set_xlabel("Logit Difference Between S and IO")
+    ax.set_xlim([-2.5,12.5])
+
+    if n == 0:
+        plt.legend([f"{plot_label}"], loc='upper right')
+    else:
+        plt.legend([f"{plot_label} (n={n})"], loc='upper right')
 
     plt.savefig(outname, bbox_inches='tight', pad_inches=0.0)
 
@@ -110,6 +119,9 @@ def plot_hists(
         ax=ax,
     )
 
+    ax.set_xlabel("Logit Difference Between S and IO")
+    ax.set_xlim([-2.5,12.5])
+
     plt.legend([f'{label_prefix}not {val}', f'{label_prefix}{val}'], loc='upper right')
 
     plt.savefig(outname, bbox_inches='tight', pad_inches=0.0)
@@ -122,18 +134,18 @@ if __name__ == '__main__':
     # % examples with logit diff < 0:	 1.348%
     # S: Lisa, then IO: Alicia
 
-    print('Loading data...')
-    df = pd.read_csv('results/small_logits.csv')
+    # print('Loading data...')
+    # df = pd.read_csv('results/small_logits.csv')
     
-    print('Plotting...')
-    plot_full_hist(df, n=100000, plot_label="GPT-2 Small Full BABA IOI Logit Diffs", outname='figs/small_full.png')
+    # print('Plotting...')
+    # plot_full_hist(df, plot_label="GPT-2 Small Full BABA IOI Logit Diffs", outname='figs/small_full.png')
     
-    print('Plotting...')
-    plot_hists(df, 'S', 'Lisa', plot_col='logit_diff', label_prefix="", outname='figs/small_s.png')
+    # print('Plotting...')
+    # plot_hists(df, 'S', 'Lisa', plot_col='logit_diff', label_prefix="", outname='figs/small_s.png')
     
-    print('Plotting...')
-    s_df = df[df['S'] == 'Lisa']
-    plot_hists(s_df, 'IO', 'Alicia', plot_col='logit_diff', label_prefix="S: Lisa, IO: ", outname='figs/small_s_io.png')
+    # print('Plotting...')
+    # s_df = df[df['S'] == 'Lisa']
+    # plot_hists(s_df, 'IO', 'Alicia', plot_col='logit_diff', label_prefix="S: Lisa, IO: ", outname='figs/small_s_io.png')
 
     # Medium
     # # examples with logit diff < 0:	 4143 out of 9313920
@@ -141,9 +153,9 @@ if __name__ == '__main__':
 
     # print('Loading data...')
     # df = pd.read_csv('results/medium_logits.csv')
-    # 
+    
     # print('Plotting...')
-    # plot_full_hist(df, n=100000, plot_label="GPT-2 Medium Full BABA IOI Logit Diffs", outname='figs/med_full.png')
+    # plot_full_hist(df, plot_label="GPT-2 Medium Full BABA IOI Logit Diffs", outname='figs/med_full.png')
 
     # Large
     # # examples with logit diff < 0:	 5986 out of 9313920
@@ -153,4 +165,4 @@ if __name__ == '__main__':
     # df = pd.read_csv('results/large_logits.csv')
 
     # print('Plotting...')
-    # plot_full_hist(df, n=100000, plot_label="GPT-2 Large Full BABA IOI Logit Diffs", outname='figs/large_full.png')
+    # plot_full_hist(df, plot_label="GPT-2 Large Full BABA IOI Logit Diffs", outname='figs/large_full.png')
