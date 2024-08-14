@@ -110,7 +110,7 @@ def plot_hists(
         ax=ax,
     )
 
-    plt.legend([f'{label_prefix}not {val}', f'{label_prefix} {val}'], loc='upper right')
+    plt.legend([f'{label_prefix}not {val}', f'{label_prefix}{val}'], loc='upper right')
 
     plt.savefig(outname, bbox_inches='tight', pad_inches=0.0)
 
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     
     print('Plotting...')
     s_df = df[df['S'] == 'Lisa']
-    plot_hists(s_df, 'IO', 'Alicia', plot_col='logit_diff', label_prefix="S: Lisa, ", outname='figs/small_s_io.png')
+    plot_hists(s_df, 'IO', 'Alicia', plot_col='logit_diff', label_prefix="S: Lisa, IO: ", outname='figs/small_s_io.png')
 
     # Medium
     # # examples with logit diff < 0:	 4143 out of 9313920
