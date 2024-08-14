@@ -132,7 +132,7 @@ if __name__ == '__main__':
     # Small
     # # examples with logit diff < 0:	 125583 out of 9313920
     # % examples with logit diff < 0:	 1.348%
-    # S: Lisa, then IO: Alicia
+    # S: Lisa, then IO: Katie
 
     # print('Loading data...')
     # df = pd.read_csv('results/small_logits.csv')
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     
     # print('Plotting...')
     # s_df = df[df['S'] == 'Lisa']
-    # plot_hists(s_df, 'IO', 'Alicia', plot_col='logit_diff', label_prefix="S: Lisa, IO: ", outname='figs/small_s_io.png')
+    # plot_hists(s_df, 'IO', 'Katie', plot_col='logit_diff', label_prefix="S: Lisa, IO: ", outname='figs/small_s_io.png')
 
     # Medium
     # # examples with logit diff < 0:	 4143 out of 9313920
